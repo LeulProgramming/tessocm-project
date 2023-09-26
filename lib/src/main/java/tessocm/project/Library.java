@@ -12,11 +12,10 @@ import java.io.File;
 
 public class Library {
     public static void main(String[] args) {
-        File imageFile = new File("dickens.jpg");
-        ITesseract instance = new Tesseract(); // JNA Interface Mapping
-        File tessDataFolder = LoadLibs.extractTessResources("tessdata"); // Maven build only; only English data bundled
+        File imageFile = new File("clean_code.jpg");
+        ITesseract instance = new Tesseract();
+        File tessDataFolder = LoadLibs.extractTessResources("tessdata");
         instance.setDatapath(tessDataFolder.getPath());
-
         try {
             String result = instance.doOCR(imageFile);
             System.out.println(result);

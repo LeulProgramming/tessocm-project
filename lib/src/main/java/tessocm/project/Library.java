@@ -18,7 +18,7 @@ public class Library {
         File imageFile = new File("dickens.jpg");
         BufferedImage b1 = ImageIO.read(imageFile);
         adjustImage(b1);
-        ImageIO.write(b1, "jpg", new File("dickens.jpg"));
+        ImageIO.write(b1, "jpg", new File("test_clean.jpg"));
         ITesseract instance = new Tesseract();
         File tessDataFolder = LoadLibs.extractTessResources("tessdata");
         instance.setLanguage("eng");
@@ -46,10 +46,13 @@ public class Library {
             int b = p & 0xff;
 
             // calculate average
-            int avg = (r + g + b) / 3;
+            r = 255 - r;
+            g = 255 - g;
+            b = 255 - b;
+
 
             // replace RGB value with avg
-            p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+            p = (a << 24) | (r << 16) | (g << 8) | b;
             pixels[i] = p;
         }
         b1.setRGB(0, 0, width, height, pixels, 0, width);

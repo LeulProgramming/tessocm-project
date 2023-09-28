@@ -15,8 +15,10 @@ import java.io.IOException;
 
 public class Library {
     public static void main(String[] args) throws IOException {
-        File imageFile = new File("rotatedcc.png");
+        File imageFile = new File("dickens.jpg");
         BufferedImage b1 = ImageIO.read(imageFile);
+        adjustImage(b1);
+        ImageIO.write(b1, "jpg", new File("dickens.jpg"));
         ITesseract instance = new Tesseract();
         File tessDataFolder = LoadLibs.extractTessResources("tessdata");
         instance.setLanguage("eng");
@@ -28,7 +30,28 @@ public class Library {
             System.err.println(e.getMessage());
         }
     }
-    public boolean someLibraryMethod() {
-        return true;
+    public static void adjustImage(BufferedImage b1) {
+        int width = b1.getWidth();
+        int height = b1.getHeight();
+        int[] pixels = b1.getRGB(0,0,width,height,null,0,width);
+        for (int i = 0; i < pixels.length; i++) {
+
+            // Here i denotes the index of array of pixels
+            // for modifying the pixel value.
+            int p = pixels[i];
+
+            int a = (p >> 24) & 0xff;
+            int r = (p >> 16) & 0xff;
+            int g = (p >> 8) & 0xff;
+            int b = p & 0xff;
+
+            // calculate average
+            int avg = (r + g + b) / 3;
+
+            // replace RGB value with avg
+            p = (a << 24) | (avg << 16) | (avg << 8) | avg;
+            pixels[i] = p;
+        }
+        b1.setRGB(0, 0, width, height, pixels, 0, width);
     }
 }

@@ -8,16 +8,21 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import net.sourceforge.tess4j.util.LoadLibs;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 public class Library {
-    public static void main(String[] args) {
-        File imageFile = new File("clean_code.jpg");
+    public static void main(String[] args) throws IOException {
+        File imageFile = new File("rotatedcc.png");
+        BufferedImage b1 = ImageIO.read(imageFile);
         ITesseract instance = new Tesseract();
         File tessDataFolder = LoadLibs.extractTessResources("tessdata");
+        instance.setLanguage("eng");
         instance.setDatapath(tessDataFolder.getPath());
         try {
-            String result = instance.doOCR(imageFile);
+            String result = instance.doOCR(b1);
             System.out.println(result);
         } catch (TesseractException e) {
             System.err.println(e.getMessage());
